@@ -1,0 +1,29 @@
+version: '2'
+services:
+  summariser: &ourservice
+    build: .
+    links:
+      - redis
+    depends_on:
+      - redis
+    working_dir: /usr/src/app
+    command: bundle exec ruby summariser.rb
+    environment:
+      REDIS_HOST: 'redis'
+
+  markov:
+    <<: *ourservice
+    command: bundle exec ruby markov.rb
+
+  watcher:
+    <<: *ourservice
+    command: bundle exec ruby watcher.rb
+
+  follower:
+    <<: *ourservice
+    command: bundle exec ruby follower.rb
+
+  redis:
+    image: redis
+    volumes:
+      - ./redis:/data
