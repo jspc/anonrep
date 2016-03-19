@@ -7,7 +7,7 @@ require 'whatlanguage'
 module AnonRep
   module RSS
 
-    def self.iterate feeds, max_link_length
+    def self.iterate feeds, max_link_length, redis_object
       wl = WhatLanguage.new(:all)
 
       summaries = []
@@ -15,7 +15,7 @@ module AnonRep
         rss = SimpleRSS.parse open(feed)
         rss.entries.each do |entry|
           link = entry.link
-          break unless untweeted_link? feed, link
+          break unless untweeted_link? redis_object, link
 
           content = extract_content(entry)
           break unless content
@@ -33,21 +33,14 @@ module AnonRep
       summaries
     end
 
-    def self.untweeted_link? feed, url
-      urls_path = 'urls.json'
+    def self.untweeted_link? redis, url
+      setname = 'rss-crawler'
 
-      urls = File.file?(urls_path) ? JSON.parse(File.read(urls_path)) : {}
-
-      unless urls[feed]
-        urls[feed] = []
-      end
-
-      if urls[feed].include? url
+      if redis.smembers(setname).include? url
         return false
       end
 
-      urls[feed] << url
-      File.open(urls_path, 'w'){|f| f.puts urls.to_json}
+      redis.sadd setname, url
       true
     end
 
