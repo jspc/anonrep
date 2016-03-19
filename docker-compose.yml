@@ -8,8 +8,11 @@ services:
       - redis
     working_dir: /usr/src/app
     command: bundle exec ruby summariser.rb
+    volumes:
+      - ./config:/config
     environment:
       REDIS_HOST: 'redis'
+      DOCKER_MODE: '1'
 
   markov:
     <<: *ourservice
@@ -27,3 +30,5 @@ services:
     image: redis
     volumes:
       - ./redis:/data
+    ports:
+      - "6379"

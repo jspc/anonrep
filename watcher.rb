@@ -16,7 +16,10 @@ use_streaming
 bottom_limit   = ENV.fetch('BOTTOM_LIMIT', 500)
 upper_limit    = ENV.fetch('UPPER_LIMIT', 10000)
 
-config = YAML.load File.read( File.join(File.dirname(__FILE__), 'config', 'config.yml') )
+# FFFUUUCCCCKKKKKKK YYYOOOUUUU Future James
+config_dir = ENV.fetch('DOCKER_MODE', 0).to_i == 1 ? '/config' : File.join(File.dirname(__FILE__), 'config')
+config = YAML.load File.read( File.join(config_dir , 'config.yml') )
+
 wl = WhatLanguage.new(:all)
 
 search config['search_terms'] do |tweet|
