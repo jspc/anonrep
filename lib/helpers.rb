@@ -1,3 +1,6 @@
+require 'colorize'
+require 'time'
+
 module AnonRep
   module Helpers
 
