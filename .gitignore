@@ -1,3 +1,9 @@
 global.yml
 anonrepertoire.yml
 *.json
+redis/
+follower.yml
+markov.yml
+summariser.yml
+watcher.yml
+text/dictionary.mmd
