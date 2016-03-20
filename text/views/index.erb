@@ -1,0 +1,9 @@
+<h2>Select new tweets</h2>
+
+<form method=POST>
+  <% @tweets.each_with_index do |tweet,index| %>
+  <p><label><input type="checkbox" name="tweet[]" value="<%= index %>" checked> <%= tweet %></label></p>
+  <% end %>
+
+  <input type="submit" value="Submit">
+</form>

@@ -6,4 +6,4 @@ follower.yml
 markov.yml
 summariser.yml
 watcher.yml
-text/dictionary.mmd
+*.mmd
