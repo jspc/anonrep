@@ -21,8 +21,13 @@ redis_object = Redis.new(host: redis_host, port: redis_port)
 
 loop do
   AnonRep::Helpers.log 'summariser', 'Starting summary spider'
-  summaries = AnonRep::RSS.iterate config['feeds'], max_link_limit, redis_object
-  AnonRep::Helpers.log 'summariser', 'Spidering complete'
+  begin
+    summaries = AnonRep::RSS.iterate config['feeds'], max_link_limit, redis_object
+    AnonRep::Helpers.log 'summariser', 'Spidering complete'
+  rescue Exception => e
+    AnonRep::Helpers.log 'summariser', "Error while spidering: #{e.message}"
+    summaries = []
+  end
 
   unless summaries.empty?
     t = summaries.sample
