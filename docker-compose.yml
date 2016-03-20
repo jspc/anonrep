@@ -13,6 +13,8 @@ services:
     environment:
       REDIS_HOST: 'redis'
       DOCKER_MODE: '1'
+      FLICKR_KEY:
+      FLICKR_SECRET:
 
   markov:
     <<: *ourservice
@@ -25,6 +27,17 @@ services:
   follower:
     <<: *ourservice
     command: bundle exec ruby follower.rb
+
+  imager:
+    <<: *ourservice
+    command: bundle exec ruby imager.rb
+
+  frontend:
+    <<: *ourservice
+    working_dir: /usr/src/app/text
+    command: thin start
+    ports:
+      - "3000"
 
   redis:
     image: redis
